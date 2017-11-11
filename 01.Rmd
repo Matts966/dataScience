@@ -1,0 +1,71 @@
+---
+title: "rStatisticsPractice01"
+author: ""
+date: "2017/10/5"
+output:
+  # word_document: default
+  pdf_document: 
+    latex_engine: lualatex 
+documentclass: ltjsarticle 
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 図1-1の作図
+
+まずは渡された小学6年生の男女の身長データを可視化する。
+
+# Data
+
+```{r}
+library(knitr)
+
+data2.m <- c(138.4, 138.9, 142.8, 143.2, 144.0, 144.1, 144.4, 144.6, 144.8, 
+             145.8, 146.2, 146.7, 147.0, 148.6, 149.5)
+data2.f <- c(142.3, 142.4, 143.4, 144.0, 144.3, 145.6, 145.9, 147.7, 147.9, 
+             148.6, 149.2, 149.7, 151.6, 151.9, 152.0)
+男子.1 <- data2.m
+女子.2 <- data2.f
+番号 <- c(rep(1,15), rep(2, 15))
+data2 = data.frame(番号, c(男子.1, 女子.2))
+kable(data2, format="pandoc")
+```
+
+# Plot
+
+```{r pressure}
+plot(c(rep(1, 15), rep(2, 15)), c(data2.m, data2.f), xlim=c(0, 3), 
+     ylim=c(130, 160), xlab="", ylab="height", xaxt="n", pch=2)
+axis(side=1, at=c(1, 2), labels=c("male", "female"))
+for (i in 0:6) lines(c(-0.2, 3.2), c(130+i*5, 130+i*5), lwd=0.5, lty=3)
+```
+
+【考察】
+lines関数のようなたくさんの文字を書かないといけない繰り返し使うものは、for文で回すことで短く表現できた。
+
+
+##図1-1のデータの平均値と不偏分散、標準偏差を求める。
+```{r data1.m, data1.f}
+data2.m <- c(138.4, 138.9, 142.8, 143.2, 144.0, 144.1, 144.4, 144.6, 144.8, 
+             145.8, 146.2, 146.7, 147.0, 148.6, 149.5)
+data2.f <- c(142.3, 142.4, 143.4, 144.0, 144.3, 145.6, 145.9, 147.7, 147.9, 
+             148.6, 149.2, 149.7, 151.6, 151.9, 152.0)
+# 男子の平均値
+mean(data2.m)
+
+# 女子の平均値
+mean(data2.f)
+
+# 男子の不偏分散と標準偏差
+var(data2.m)
+sd(data2.m)
+
+# 女子の不偏分散と標準偏差
+var(data2.f)
+sd(data2.f)
+```
+
+【考察】
+今回はRmarkdownを用いて自動で結果を埋め込むことができた。pdfにして出す場合内部的にはLaTeXから出力しているらしく、日本語フォントの問題で最終的にWord形式になってしまったのが、少し残念だ。→日本語に対応した。デフォルトで分散は不偏分散となるRは、分析の際調整の必要がなく、便利であると感じた。
